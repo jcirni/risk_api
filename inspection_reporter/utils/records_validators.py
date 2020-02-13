@@ -31,3 +31,4 @@ def is_valid_zip(val):
 
 def is_valid_address(val):
     """tests for valid street name and suffix"""
+    return val
