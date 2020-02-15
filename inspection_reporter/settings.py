@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'coverage',
     'rest_framework',
     'inspection_reporter.records',
 ]
@@ -115,6 +116,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+#DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
