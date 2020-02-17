@@ -2,8 +2,9 @@ from django.test import TestCase
 
 from ..records.models import Restaurant, Inspection, Violation, InspectionViolation
 
+
 class BaseModelTestCase(TestCase):
-    
+
     @classmethod
     def setUpTestData(cls):
         cls.mickyd_data = {
@@ -29,7 +30,7 @@ class BaseModelTestCase(TestCase):
             code='5',
             description='this is a health code violation',
             comments='comment',
-            inspection_id = 306,
+            inspection_id=306,
             violation_id=8
         )
 
@@ -38,8 +39,9 @@ class BaseModelTestCase(TestCase):
             inspection_id=306,
         )
 
+
 class BaseSerializerTestCase(TestCase):
-    
+
     @classmethod
     def setUpTestData(cls):
         cls.inspection_data = {
@@ -54,7 +56,7 @@ class BaseSerializerTestCase(TestCase):
                 "description": "Hands clean and properly washed",
                 "comments": "Observed BOH employee handle raw chicken, rinse hands w/ water only, then handle non-food-contact surfaces and money. Corrected on site with notice to PIC."
             },
-            {
+                {
                 "violation_id": 1005,
                 "is_critical": True,
                 "code": "6",

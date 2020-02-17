@@ -5,12 +5,14 @@ from inspection_reporter.utils.records_constants import ABBREV_STATE
 import re
 from datetime import datetime
 
+
 def valid_char(val):
     """Checks a string for non alphabetic characters."""
     if not val.isalpha():
         raise ValidationError(
             'field must only contain letters, no numbers or special characters'
         )
+
 
 def valid_state_abbrev(val):
     """validates state code"""
@@ -19,17 +21,21 @@ def valid_state_abbrev(val):
         raise ValidationError(
             'not a valid state abbreviation'
         )
-    
+
+
 def valid_zip(val):
     """assuming 5 digit zip"""
     if not val.isdigit():
         raise ValidationError(
             'should be a simple 5 digit zip code'
         )
-#TODO: Move to helpers library
+# TODO: Move to helpers library
+
+
 def has_invalid_char(val):
     special_chars = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
     return special_chars.search(val)
+
 
 def valid_address(val):
     """tests for valid street name and suffix"""
@@ -38,11 +44,13 @@ def valid_address(val):
             'address can not have [@_!$%^&*()<>?/\|}{~:]'
         )
 
+
 def valid_score(val):
     if val > 100 or val < 0:
         raise ValidationError(
             'score must be 0 - 100'
         )
+
 
 def valid_date(val):
     if val > datetime.date(datetime.now()):
