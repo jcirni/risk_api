@@ -1,4 +1,6 @@
-from inspection_reporter.records.models import Restaurant, Inspection, Violation, InspectionViolation
+from inspection_reporter.records.models import (
+    Restaurant, Inspection, Violation, InspectionViolation
+)
 from inspection_reporter.utils import helpers
 from inspection_reporter.utils import records_validators as validators
 
@@ -29,14 +31,15 @@ class RestaurantSerializer(serializers.Serializer):
         return Restaurant(**validated_data)
 
     def update(self, instance, validated_data):
-        restaurant_id = validated_data.get(
+        self.restaurant_id = validated_data.get(
             'restaurant_id', instance.restaurant_id)
-        name = validated_data.get('name', instance.name)
-        street_address = validated_data.get(
+        self.name = validated_data.get('name', instance.name)
+        self.street_address = validated_data.get(
             'street_address', instance.street_address)
-        city = validated_data.get('city', instance.city)
-        state = validated_data.get('state', instance.state)
-        postal_code = validated_data.get('postal_code', instance.postal_code)
+        self.city = validated_data.get('city', instance.city)
+        self.state = validated_data.get('state', instance.state)
+        self.postal_code = validated_data.get(
+            'postal_code', instance.postal_code)
         instance.save()
         return instance
 

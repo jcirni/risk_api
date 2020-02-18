@@ -11,13 +11,17 @@ class RestaurantViewTestCase(TestCase):
             "inspection_id": 34078,
             "inspection_date": "2018-06-02",
             "score": 88,
-            "comments": "Discussed employee illness policy with PIC. Discussed clean up procedures with PIC.",
+            "comments": ("Discussed employee illness policy with PIC. "
+                         "Discussedclean up procedures with PIC."),
             "violations": [{
                 "violation_id": 1004,
                 "is_critical": True,
                 "code": "5",
                 "description": "Hands clean and properly washed",
-                "comments": "Observed BOH employee handle raw chicken, rinse hands w/ water only, then handle non-food-contact surfaces and money. Corrected on site with notice to PIC."
+                "comments": ("Observed BOH employee handle raw chicken, rinse "
+                             "hands w/ water only, then handle non-food-"
+                             "contact surfaces and money. Corrected on site "
+                             "with notice to PIC.")
             },
                 {
                 "violation_id": 1005,
@@ -35,7 +39,8 @@ class RestaurantViewTestCase(TestCase):
                 "violation_id": 1007,
                 "is_critical": True,
                 "code": "8",
-                "description": "Toxic substances properly identified, stored, and used",
+                "description": ("Toxic substances properly identified, stored,"
+                                " and used"),
                 "comments": "Sanitizer stored above produce (COS)"
             }],
             "restaurant": {
@@ -99,4 +104,5 @@ class RestaurantViewTestCase(TestCase):
                 self.restaurant_data['restaurant_id'], i.data['restaurant_id'])
         else:
             self.fail(
-                f'Failed to retrieve object with {i.status_code}. Tried using {self.restaurant_data}')
+                f'Failed to retrieve object with {i.status_code}.',
+                f'Tried using {self.restaurant_data}')

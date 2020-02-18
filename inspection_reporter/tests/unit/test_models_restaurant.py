@@ -28,9 +28,11 @@ class RestaurantTestCase(BaseModelTestCase):
             inspection__restaurant_id=r.restaurant_id).count()
         inspections = r.inspections.all().count()
         calculated_average = violations/inspections
-        self.assertEqual(r.average_violations(),
-                         calculated_average, msg=InspectionViolation.objects.filter(
-            inspection__restaurant_id=r.restaurant_id))
+        self.assertEqual(
+            r.average_violations(),
+            calculated_average,
+            msg=InspectionViolation.objects.filter(
+                inspection__restaurant_id=r.restaurant_id))
 
     def test_calculate_avg_score_correct(self):
         r = Restaurant.objects.get(pk=1)

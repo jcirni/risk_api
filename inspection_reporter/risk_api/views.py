@@ -27,7 +27,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
             r = serializer.create(serializer.validated_data)
             r.save()
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.data)
 
