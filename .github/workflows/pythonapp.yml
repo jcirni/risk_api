@@ -27,3 +27,16 @@ jobs:
     - name: Test with coverage
       run: |
         python3 manage.py test
+    - name: Create Release Folder
+      run: |
+        rsync -arv --exclude='.git/' --exclude='.github/' --exclude='.gitignore' . ./release
+    - name: Generate Release Folder
+      run: |
+        cd release
+        ls -la
+    - name: Bump version, push tag
+      uses: anothrNick/github-tag-action@1.13.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+
