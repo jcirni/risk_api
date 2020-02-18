@@ -1,6 +1,12 @@
 # risk_api
 Django RESTful API for managing restaurant health inspection history
 
+## Set Up
+
+```
+source ./bin/setup.sh
+./bin/start.sh
+```
 ## Engineering Narrative:
 https://docs.google.com/document/d/1ANhoOqOXt211WCpppfI44l1tBQbv-3UnaW4VlJ7XnfE/edit?usp=sharing
 
