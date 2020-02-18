@@ -29,7 +29,6 @@ def valid_zip(val):
         raise ValidationError(
             'should be a simple 5 digit zip code'
         )
-# TODO: Move to helpers library
 
 
 def has_invalid_char(val):
@@ -43,6 +42,11 @@ def valid_address(val):
         raise ValidationError(
             'address can not have [@_!$%^&*()<>?/\|}{~:]'
         )
+    name = val.split(' ')
+    name_length = len(name)
+    if name_length <= 1:
+        raise ValidationError(
+            'address must be at least a street number and street name')
 
 
 def valid_score(val):
@@ -57,3 +61,9 @@ def valid_date(val):
         raise ValidationError(
             'no future date allowed'
         )
+
+
+def valid_id(val):
+    if val < 0:
+        raise ValidationError(
+            'must be a non negative integer')

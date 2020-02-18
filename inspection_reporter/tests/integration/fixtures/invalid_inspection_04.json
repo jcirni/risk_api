@@ -1,0 +1,19 @@
+{
+  "inspection_id": 34078,
+  "score": -1,
+  "comments": "multiple types of invalid behavior",
+  "violations": [{
+    "is_critical": "true",
+    "code": "5",
+    "description": null,
+    "comments": ""
+  }],
+  "restaurant": {
+    "restaurantID": 201,
+    "name": "",
+    "street_address": "SKINNER HOLLOW RD",
+    "city": "HAINES",
+    "state": "ORR",
+    "postal_code": "97833-022"
+  }
+}

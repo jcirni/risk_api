@@ -21,7 +21,10 @@ from rest_framework import routers
 from .risk_api import views as risk_api_views
 
 router = routers.DefaultRouter()
-router.register(r'inspection', risk_api_views.InspectionViewSet, basename='inspection')
+router.register(r'inspection', risk_api_views.InspectionViewSet,
+                basename='inspection')
+router.register(r'restaurant', risk_api_views.RestaurantViewSet,
+                basename='restaurant')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,9 +1,12 @@
 from django.test import TestCase
+from ...utils import helpers
 
 from rest_framework.test import APIClient
 
-from ...records.models import Restaurant, Violation, InspectionViolation
+from ...records.models import Restaurant, Violation, InspectionViolation, Inspection
 from ...risk_api.serializers import InspectionSerializer
+
+import json
 
 
 class InspectionViewTestCase(TestCase):
@@ -56,7 +59,7 @@ class InspectionViewTestCase(TestCase):
 
     def test_post_valid_json_passes(self):
         self.client.post('/inspection', self.inspection_data, format='json')
-        # expected entries # of violations, inspectionviolations and restaurant
+        # expected entries # of violations, #of inspectionviolations and restaurant
         expected_entries = len(self.inspection_data['violations']) * 2 + 1
         serializer = InspectionSerializer(data=self.inspection_data)
         if not serializer.is_valid():
@@ -94,24 +97,26 @@ class InspectionViewTestCase(TestCase):
             self.fail(
                 f'Failed to retrieve object with {i.status_code}')
 
-    def test_create_inspection_same_restaurant_passes(self):
-        """
-        New Inspection of same restaurant does not try to create
-        a new restaurant entry.
-        """
+    def test_new_inspection_updates_restaurant_avg_score(self):
+        inspection = self.client.post('/api/inspection/',
+                                      self.inspection_data, format='json')
+        restaurant_id = inspection.data['restaurant']['restaurant_id']
+        restaurant = helpers.get_if_exists(
+            Restaurant, restaurant_id=restaurant_id)
+        if restaurant is None:
+            self.fail('restaurant not found')
 
-        serializer = InspectionSerializer(data=self.inspection_data)
-        if not serializer.is_valid():
-            self.fail(serializer.errors)
-        # create initial inspection and restaurant
-        serializer.create(serializer.validated_data)
-        # modify inspection ID to add new entry with same restaurant
-        serializer = InspectionSerializer(data=self.inspection_data)
-        serializer.initial_data['inspection_id'] = 303
-        serializer.is_valid()
-        rs = Restaurant.objects.all()
-        old_count = rs.count()
-        serializer.create(serializer.validated_data)
-        new_count = rs.count()
-        # There should be no difference
-        self.assertEquals(old_count, new_count)
+        inspections = restaurant.inspections.all()
+        total_score = 0
+        for entry in inspections:
+            total_score += entry.score
+        calculated_average = total_score / inspections.count()
+
+        self.assertEquals(restaurant.average_score(),
+                          calculated_average, msg=calculated_average)
+
+    def test_new_inspection_updates_restaurant_avg_violations(self):
+        pass
+
+    def test_new_inspection_updates_restaurant_total_inspections(self):
+        pass

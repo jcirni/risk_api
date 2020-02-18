@@ -1,0 +1,14 @@
+{
+  "inspection_id": 34078,
+  "inspection_date": "2018-06-02",
+  "score": 94,
+  "comments": "violations array must exist",
+  "restaurant": {
+    "restaurant_id": 201,
+    "name": "SKINNER'S DINNERS",
+    "street_address": "3325-A SKINNER HOLLOW RD",
+    "city": "HAINES",
+    "state": "OR",
+    "postal_code": "97833"
+  }
+}

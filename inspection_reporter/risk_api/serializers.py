@@ -1,18 +1,29 @@
 from inspection_reporter.records.models import Restaurant, Inspection, Violation, InspectionViolation
-from inspection_reporter.utils.helpers import get_if_exists
+from inspection_reporter.utils import helpers
+from inspection_reporter.utils import records_validators as validators
+
 from rest_framework import serializers
 
 
 class RestaurantSerializer(serializers.Serializer):
     """
-    custom validation for Restaurant uniqueness on inspection payloads."""
+    custom serializer for Restaurant to remove uniqueness check during
+    serialization on inbound inspection payloads."""
 
-    restaurant_id = serializers.IntegerField()
+    restaurant_id = serializers.IntegerField(validators=[validators.valid_id])
     name = serializers.CharField(max_length=50)
-    street_address = serializers.CharField(max_length=50)
+    street_address = serializers.CharField(
+        max_length=50, validators=[validators.valid_address])
     city = serializers.CharField(max_length=50)
-    state = serializers.CharField(max_length=2)
-    postal_code = serializers.CharField(max_length=5)
+    state = serializers.CharField(max_length=2, validators=[
+        validators.valid_state_abbrev])
+    postal_code = serializers.CharField(
+        max_length=5, validators=[validators.valid_zip])
+    sum_score = serializers.DecimalField(
+        max_digits=5, decimal_places=2, default=0.00)
+    sum_violations = serializers.DecimalField(
+        max_digits=5, decimal_places=2, default=0.00)
+    total_inspections = serializers.IntegerField(default=0)
 
     def create(self, validated_data):
         return Restaurant(**validated_data)
@@ -28,11 +39,6 @@ class RestaurantSerializer(serializers.Serializer):
         postal_code = validated_data.get('postal_code', instance.postal_code)
         instance.save()
         return instance
-
-    class Meta:
-        model = Restaurant
-        fields = ['restaurant_id', 'name', 'street_address',
-                  'city', 'state', 'postal_code']
 
 
 class ViolationSerializer(serializers.ModelSerializer):
@@ -52,17 +58,18 @@ class InspectionSerializer(serializers.ModelSerializer):
                   'score', 'comments', 'violations', 'restaurant']
 
     def create(self, validated_data):
+        """create override to support writable nested object handling"""
         violations_data = validated_data.pop('violations')
         restaurant_data = validated_data.pop('restaurant')
         # If new restaurant, create it
-        r = get_if_exists(
+        r = helpers.get_if_exists(
             Restaurant, restaurant_id=restaurant_data['restaurant_id'])
         if r is None:
             r = Restaurant(**restaurant_data)
             r.save()
         inspection = Inspection.objects.create(
             restaurant_id=r.restaurant_id, **validated_data)
-        # flip flag
+        # update restaurant state, in case of violation failure
         r.is_current = False
         r.save()
 
@@ -71,5 +78,8 @@ class InspectionSerializer(serializers.ModelSerializer):
                 inspection_id=inspection.inspection_id, **obj)
             InspectionViolation.objects.create(
                 inspection_id=inspection.inspection_id, violation=violation)
+
+        r.update_aggregates(num_violations=len(
+            violations_data), score=inspection.score)
 
         return inspection
