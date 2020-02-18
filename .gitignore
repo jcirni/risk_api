@@ -1,7 +1,6 @@
 .vscode
 .coverage
 __pycache__/
-manage.py
 *.log
 local_settings.py
 db.sqlite3
