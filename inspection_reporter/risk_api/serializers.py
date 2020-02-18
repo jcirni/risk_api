@@ -1,8 +1,8 @@
-from inspection_reporter.records.models import (
+from ..records.models import (
     Restaurant, Inspection, Violation, InspectionViolation
 )
-from inspection_reporter.utils import helpers
-from inspection_reporter.utils import records_validators as validators
+from ..utils import helpers
+from ..utils import records_validators as validators
 
 from rest_framework import serializers
 
@@ -22,10 +22,10 @@ class RestaurantSerializer(serializers.Serializer):
     postal_code = serializers.CharField(
         max_length=5, validators=[validators.valid_zip])
     sum_score = serializers.DecimalField(
-        max_digits=5, decimal_places=2, default=0.00)
+        max_digits=5, decimal_places=2, read_only=True)
     sum_violations = serializers.DecimalField(
-        max_digits=5, decimal_places=2, default=0.00)
-    total_inspections = serializers.IntegerField(default=0)
+        max_digits=5, decimal_places=2, read_only=True)
+    total_inspections = serializers.IntegerField(default=0, read_only=True)
 
     def create(self, validated_data):
         return Restaurant(**validated_data)
@@ -86,3 +86,21 @@ class InspectionSerializer(serializers.ModelSerializer):
             violations_data), score=inspection.score)
 
         return inspection
+
+
+class InspectionSubSetSierializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inspection
+        fields = ['inspection_id', 'inspection_date', ]
+
+
+class HistorySerializer(serializers.ModelSerializer):
+    inspections = InspectionSubSetSierializer(many=True, read_only=True)
+
+    class Meta:
+        model = Restaurant
+        fields = [
+            'restaurant_id', 'name', 'street_address', 'city', 'state',
+            'postal_code', 'average_score', 'average_violations',
+            'total_inspections', 'inspections'
+        ]

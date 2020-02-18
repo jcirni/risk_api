@@ -2,6 +2,8 @@ from django.test import TestCase
 
 from rest_framework.test import APIClient
 
+from ...records.models import Restaurant
+
 
 class RestaurantViewTestCase(TestCase):
 
@@ -106,3 +108,52 @@ class RestaurantViewTestCase(TestCase):
             self.fail(
                 f'Failed to retrieve object with {i.status_code}.',
                 f'Tried using {self.restaurant_data}')
+
+    def test_retrieve_restaurant_history_correct_restaurant(self):
+        # post two inspections pointing to same restaurant
+        self.client.post('/api/inspection/',
+                         self.inspection_data, format='json')
+
+        # copy first with new ids
+        another_inspection = dict(self.inspection_data)
+        another_inspection['inspection_id'] += 1
+        for v in another_inspection['violations']:
+            v['violation_id'] += 100
+
+        self.client.post('/api/inspection/',
+                         another_inspection, format='json')
+        r_id = self.inspection_data['restaurant']['restaurant_id']
+        path = f"/api/restaurant/{r_id}/"
+        r_view = self.client.get(path, format='json')
+        r_model = Restaurant.objects.get(restaurant_id=r_id)
+        self.assertEqual(r_view.data['restaurant_id'], r_model.restaurant_id)
+
+    def test_retrieve_restaurant_history_correct_aggregates(self):
+        # post two inspections pointing to same restaurant
+        self.client.post('/api/inspection/',
+                         self.inspection_data, format='json')
+
+        # copy first with new ids
+        another_inspection = dict(self.inspection_data)
+        another_inspection['inspection_id'] += 1
+        for v in another_inspection['violations']:
+            v['violation_id'] += 100
+
+        self.client.post('/api/inspection/',
+                         another_inspection, format='json')
+        r_id = self.inspection_data['restaurant']['restaurant_id']
+        path = f"/api/restaurant/{r_id}/"
+        r_view = self.client.get(path, format='json')
+        r_model = Restaurant.objects.get(restaurant_id=r_id)
+        view_aggregates = [
+            r_view.data['average_score'],
+            r_view.data['average_violations'],
+            r_view.data['total_inspections']
+        ]
+        model_aggregates = [
+            r_model.average_score(),
+            r_model.average_violations(),
+            r_model.total_inspections
+        ]
+        self.assertEqual(view_aggregates,
+                         model_aggregates)

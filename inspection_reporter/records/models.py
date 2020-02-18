@@ -24,9 +24,13 @@ class Restaurant(BaseModel):
     total_inspections = models.IntegerField(default=0)
 
     def average_score(self):
+        if self.total_inspections == 0:
+            return self.total_inspections
         return self.sum_score / self.total_inspections
 
     def average_violations(self):
+        if self.sum_violations == 0:
+            return self.total_inspections
         return self.sum_violations / self.total_inspections
 
     class Meta:

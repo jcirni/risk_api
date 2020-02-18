@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 
-from .serializers import InspectionSerializer, RestaurantSerializer
+from .serializers import (InspectionSerializer,
+                          RestaurantSerializer, HistorySerializer)
 from ..records.models import Inspection, Restaurant
 
 
@@ -34,5 +35,5 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         restaurant = get_object_or_404(self.queryset, restaurant_id=pk)
-        serializer = self.serializer_class(restaurant)
-        return Response(serializer.data)
+        restaurant_data = HistorySerializer(restaurant)
+        return Response(restaurant_data.data)
