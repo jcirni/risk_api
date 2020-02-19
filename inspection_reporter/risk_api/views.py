@@ -35,5 +35,8 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         restaurant = get_object_or_404(self.queryset, restaurant_id=pk)
+        if not restaurant.is_current:
+            restaurant.calculate_aggregates()
         restaurant_data = HistorySerializer(restaurant)
+
         return Response(restaurant_data.data)

@@ -25,7 +25,11 @@ class RestaurantSerializer(serializers.Serializer):
         max_digits=5, decimal_places=2, read_only=True)
     sum_violations = serializers.DecimalField(
         max_digits=5, decimal_places=2, read_only=True)
-    total_inspections = serializers.IntegerField(default=0, read_only=True)
+    average_score = serializers.DecimalField(
+        max_digits=5, decimal_places=2, read_only=True)
+    average_violations = serializers.DecimalField(
+        max_digits=5, decimal_places=2, read_only=True)
+    total_inspections = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data):
         return Restaurant(**validated_data)
@@ -92,6 +96,7 @@ class InspectionSubSetSierializer(serializers.ModelSerializer):
     class Meta:
         model = Inspection
         fields = ['inspection_id', 'inspection_date', ]
+        read_only_fields = fields
 
 
 class HistorySerializer(serializers.ModelSerializer):
@@ -104,3 +109,4 @@ class HistorySerializer(serializers.ModelSerializer):
             'postal_code', 'average_score', 'average_violations',
             'total_inspections', 'inspections'
         ]
+        read_only_fields = fields
