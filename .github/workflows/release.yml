@@ -1,0 +1,17 @@
+name: Release
+on:
+  push:
+    tags:
+      - v[0-9].[4-9]*
+
+jobs:
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Publish"
+        uses: marvinpinto/action-automatic-releases@v0.2.2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
