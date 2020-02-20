@@ -2,11 +2,33 @@
 Django RESTful API for managing restaurant health inspection history
 
 ## Set Up
-
+run the following commands to get started:
 ```
 source ./bin/setup.sh
-./bin/start.sh
+./bin/start.sh [:optional port number]
 ```
+risk_api will spin up the Django WSGI server and run on your local
+environment at the specified port or 8000 by default
+
+You can view the browsable api at root endpoint:
+http://127.0.0.1:8000/api/
+http://localhost:8000/api/
+
+The app will run in debug mode allowing you to see all requests
+processed in your terminal
+
+API supports JSON requests at the following endpoints:
+
+| Endpoint | Command | Description |
+| --- | --- | --- |
+| /api/inspection/ | LIST | Lists all inspections saved |
+| /api/inspection/ | POST | \[JSON\] Creates a new record of an inspection |
+| /api/inspection/<inspection_id\> | GET | retrieves specified inspection |
+| /api/restaurant/ | LIST | Lists all restaurants saved |
+| /api/restaurant/ | POST | \[JSON\]Creates new restaurant record |
+| /api/restaurant/\<inspection_id\> | GET | Retrieves specified restaurant and related history |
+
+
 ## Engineering Narrative:
 https://docs.google.com/document/d/1ANhoOqOXt211WCpppfI44l1tBQbv-3UnaW4VlJ7XnfE/edit?usp=sharing
 
