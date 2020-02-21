@@ -40,7 +40,7 @@ jobs:
         WITH_V: true
     - name: "Publish"
       uses: marvinpinto/action-automatic-releases@v0.2.2
-      if: startsWith(version.outputs.new_version, 'v0.4')
+      if: startsWith(steps.version.outputs.new_version, 'v0.4')
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         prerelease: false
