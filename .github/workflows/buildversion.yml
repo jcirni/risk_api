@@ -1,4 +1,4 @@
-name: Python application
+name: Tag and Release on Major
 
 on: [push]
 
@@ -39,11 +39,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
     - run : |
-        printenv
-        echo ${{ steps.version.outputs.new_tag }}
+        echo 'New version tag: '${{ steps.version.outputs.new_tag }}
     - name: "Publish"
       uses: marvinpinto/action-automatic-releases@v0.2.2
-      if: startsWith(steps.version.outputs.new_version, '0.4')
+      if: startsWith(steps.version.outputs.new_tag, 'v0.4')
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         prerelease: false
