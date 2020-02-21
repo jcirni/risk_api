@@ -34,7 +34,13 @@ jobs:
         ls -la
     - name: Bump version, push tag
       uses: anothrNick/github-tag-action@1.13.0
+      id: version
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
-
+    - name: "Publish"
+      uses: marvinpinto/action-automatic-releases@v0.2.2
+      if: startsWith(version.outputs.new_version, 'v0.4')
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        prerelease: false
