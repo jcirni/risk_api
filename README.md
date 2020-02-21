@@ -26,7 +26,7 @@ API supports JSON requests at the following endpoints:
 | /api/inspection/<inspection_id\> | GET | retrieves specified inspection |
 | /api/restaurant/ | LIST | Lists all restaurants saved |
 | /api/restaurant/ | POST | \[JSON\]Creates new restaurant record |
-| /api/restaurant/\<inspection_id\> | GET | Retrieves specified restaurant and related history |
+| /api/restaurant/\<restaurant_id\> | GET | Retrieves specified restaurant and related history |
 
 
 ## Engineering Narrative:

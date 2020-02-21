@@ -17,6 +17,12 @@ class InspectionViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(inspection)
         return Response(serializer.data)
 
+    def destroy(self, request, pk=None):
+        return Response(status.HTTP_403_FORBIDDEN)
+
+    def update(self, request, pk=None):
+        return Response(status.HTTP_403_FORBIDDEN)
+
 
 class RestaurantViewSet(viewsets.ModelViewSet):
     queryset = Restaurant.objects.all()
@@ -40,3 +46,9 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         restaurant_data = HistorySerializer(restaurant)
 
         return Response(restaurant_data.data)
+
+    def destroy(self, request, pk=None):
+        return Response(status.HTTP_403_FORBIDDEN)
+
+    def update(self, request, pk=None):
+        return Response(status.HTTP_403_FORBIDDEN)

@@ -35,6 +35,12 @@ class RestaurantSerializer(serializers.Serializer):
         return Restaurant(**validated_data)
 
     def update(self, instance, validated_data):
+        """TODO: remove explicit update behavior and shift to a back
+        up and create new entry pattern. Seems like a better data integrity
+        approach
+
+        requires a new field for managing state of record (eg.'deleted')"""
+
         self.restaurant_id = validated_data.get(
             'restaurant_id', instance.restaurant_id)
         self.name = validated_data.get('name', instance.name)
