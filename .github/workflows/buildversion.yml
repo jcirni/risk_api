@@ -38,6 +38,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
+    - run : |
+        echo steps.version.outputs.new_version
     - name: "Publish"
       uses: marvinpinto/action-automatic-releases@v0.2.2
       if: startsWith(steps.version.outputs.new_version, 'v0.4')
